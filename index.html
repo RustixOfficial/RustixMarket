@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rustix Market</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        /* =========================
+           ШАПКА
+        ========================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            background: #111827;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 18px 7%;
+            gap: 20px;
+
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #60a5fa;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #60a5fa;
+        }
+
+        .cart-button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 11px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* =========================
+           ГЛАВНЫЙ ЭКРАН
+        ========================= */
+
+        .hero {
+            min-height: 430px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 70px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .hero h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .hero-button {
+            border: none;
+            background: white;
+            color: #2563eb;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .hero-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           МАГАЗИН
+        ========================= */
+
+        .shop {
+            padding: 70px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .section-description {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 40px;
+        }
+
+        /* Поиск */
+
+        .search-box {
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #2563eb;
+        }
+
+        /* Категории */
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .category-button {
+            border: none;
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 10px 17px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .category-button:hover,
+        .category-button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        /* Товары */
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+            transition: 0.25s;
+        }
+
+        .product:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-image {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #f3f4f6;
+            border-radius: 14px;
+
+            font-size: 80px;
+
+            margin-bottom: 20px;
+        }
+
+        .product h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 65px;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .buy-button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .buy-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* =========================
+           КОРЗИНА
+        ========================= */
+
+        .cart-modal {
+            display: none;
+
+            position: fixed;
+            z-index: 2000;
+            inset: 0;
+
+            background: rgba(0, 0, 0, 0.55);
+
+            justify-content: flex-end;
+        }
+
+        .cart-modal.open {
+            display: flex;
+        }
+
+        .cart {
+            width: 420px;
+            max-width: 100%;
+            height: 100%;
+
+            background: white;
+
+            padding: 25px;
+
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .cart-header h2 {
+            font-size: 26px;
+        }
+
+        .close-cart {
+            border: none;
+            background: #ef4444;
+            color: white;
+
+            width: 35px;
+            height: 35px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cart-item-icon {
+            font-size: 40px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .remove-button {
+            border: none;
+            background: #fee2e2;
+            color: #dc2626;
+
+            padding: 7px 10px;
+            border-radius: 7px;
+
+            cursor: pointer;
+        }
+
+        .cart-total {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .checkout-button {
+            width: 100%;
+
+            border: none;
+            background: #16a34a;
+            color: white;
+
+            padding: 15px;
+            border-radius: 10px;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 20px;
+        }
+
+        .checkout-button:hover {
+            background: #15803d;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 40px;
+        }
+
+        /* =========================
+           ПОДВАЛ
+        ========================= */
+
+        footer {
+            background: #111827;
+            color: white;
+
+            text-align: center;
+
+            padding: 35px 20px;
+            margin-top: 30px;
+        }
+
+        footer p {
+            margin: 7px;
+            color: #9ca3af;
+        }
+
+        /* =========================
+           УВЕДОМЛЕНИЕ
+        ========================= */
+
+        .notification {
+            position: fixed;
+
+            bottom: 25px;
+            right: 25px;
+
+            background: #16a34a;
+            color: white;
+
+            padding: 15px 20px;
+            border-radius: 10px;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+
+            transform: translateY(100px);
+            opacity: 0;
+
+            transition: 0.3s;
+
+            z-index: 5000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =========================
+           АДАПТАЦИЯ
+        ========================= */
+
+        @media (max-width: 1100px) {
+            .products {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            header {
+                flex-wrap: wrap;
+            }
+
+            nav {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            .product-bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .buy-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         ШАПКА
+    ========================== -->
+
+    <header>
+
+        <div class="logo">
+            Rustix <span>Market</span>
+        </div>
+
+        <nav>
+            <a href="#home">Главная</a>
+            <a href="#shop">Магазин</a>
+        </nav>
+
+        <button class="cart-button" onclick="openCart()">
+            🛒 Корзина (<span id="cartCount">0</span>)
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         ГЛАВНЫЙ ЭКРАН
+    ========================== -->
+
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>Rustix Market</h1>
+
+            <p>
+                Фейковый интернет-магазин гаджетов,
+                созданный специально для твоего проекта.
+            </p>
+
+            <button
+                class="hero-button"
+                onclick="document.getElementById('shop').scrollIntoView()"
+            >
+                Перейти в магазин
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         МАГАЗИН
+    ========================== -->
+
+    <main class="shop" id="shop">
+
+        <h2 class="section-title">
+            Наши товары
+        </h2>
+
+        <p class="section-description">
+            Все товары на этом сайте вымышлены.
+            Покупки настоящими деньгами невозможны.
+        </p>
+
+
+        <!-- ПОИСК -->
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔎 Поиск товаров..."
+                oninput="searchProducts()"
+            >
+
+        </div>
+
+
+        <!-- КАТЕГОРИИ -->
+
+        <div class="categories">
+
+            <button
+                class="category-button active"
+                onclick="filterProducts('all', this)"
+            >
+                Все
+            </button>
+
+            <button
+                class="category-button"
+                onclick="filterProducts('phone', this)"
+            >
+                📱 Телефоны
+            </button>
+
+            <button
+                class="category-button"
+                onclick="filterProducts('computer', this)"
+            >
+                💻 Компьютеры
+            </button>
+
+            <button
+                class="category-button"
+                onclick="filterProducts('audio', this)"
+            >
+                🎧 Аудио
+            </button>
+
+            <button
+                class="category-button"
+                onclick="filterProducts('other', this)"
+            >
+                ⚡ Гаджеты
+            </button>
+
+        </div>
+
+
+        <!-- ТОВАРЫ -->
+
+        <div class="products" id="products">
+
+            <!-- 1 -->
+
+            <div
+                class="product"
+                data-category="phone"
+                data-name="Rustix Phone X1"
+            >
+
+                <div class="product-image">
+                    📱
+                </div>
+
+                <h3>Rustix Phone X1</h3>
+
+                <p class="product-description">
+                    Фантастический смартфон
+                    с огромным экраном.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $899
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Phone X1',
+                            899,
+                            '📱'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 2 -->
+
+            <div
+                class="product"
+                data-category="phone"
+                data-name="Rustix Phone Mini"
+            >
+
+                <div class="product-image">
+                    📱
+                </div>
+
+                <h3>Rustix Phone Mini</h3>
+
+                <p class="product-description">
+                    Маленький вымышленный
+                    смартфон для повседневных задач.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $599
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Phone Mini',
+                            599,
+                            '📱'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 3 -->
+
+            <div
+                class="product"
+                data-category="computer"
+                data-name="Rustix Laptop Pro"
+            >
+
+                <div class="product-image">
+                    💻
+                </div>
+
+                <h3>Rustix Laptop Pro</h3>
+
+                <p class="product-description">
+                    Мощный вымышленный ноутбук
+                    для самых сложных задач.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $1299
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Laptop Pro',
+                            1299,
+                            '💻'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 4 -->
+
+            <div
+                class="product"
+                data-category="computer"
+                data-name="Rustix Gaming PC"
+            >
+
+                <div class="product-image">
+                    🖥️
+                </div>
+
+                <h3>Rustix Gaming PC</h3>
+
+                <p class="product-description">
+                    Игровой компьютер из
+                    полностью вымышленных комплектующих.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $1999
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Gaming PC',
+                            1999,
+                            '🖥️'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 5 -->
+
+            <div
+                class="product"
+                data-category="audio"
+                data-name="Rustix Buds"
+            >
+
+                <div class="product-image">
+                    🎧
+                </div>
+
+                <h3>Rustix Buds</h3>
+
+                <p class="product-description">
+                    Беспроводные наушники
+                    вымышленной серии Rustix.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $149
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Buds',
+                            149,
+                            '🎧'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 6 -->
+
+            <div
+                class="product"
+                data-category="audio"
+                data-name="Rustix Headphones"
+            >
+
+                <div class="product-image">
+                    🎧
+                </div>
+
+                <h3>Rustix Headphones</h3>
+
+                <p class="product-description">
+                    Большие беспроводные
+                    наушники для музыки.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $249
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Headphones',
+                            249,
+                            '🎧'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 7 -->
+
+            <div
+                class="product"
+                data-category="other"
+                data-name="Rustix Watch"
+            >
+
+                <div class="product-image">
+                    ⌚
+                </div>
+
+                <h3>Rustix Watch</h3>
+
+                <p class="product-description">
+                    Умные часы из вымышленной
+                    линейки Rustix.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $299
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Watch',
+                            299,
+                            '⌚'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 8 -->
+
+            <div
+                class="product"
+                data-category="other"
+                data-name="Rustix VR"
+            >
+
+                <div class="product-image">
+                    🥽
+                </div>
+
+                <h3>Rustix VR</h3>
+
+                <p class="product-description">
+                    Фантастический VR-шлем
+                    для виртуального мира.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $499
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix VR',
+                            499,
+                            '🥽'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 9 -->
+
+            <div
+                class="product"
+                data-category="other"
+                data-name="Rustix Camera"
+            >
+
+                <div class="product-image">
+                    📷
+                </div>
+
+                <h3>Rustix Camera</h3>
+
+                <p class="product-description">
+                    Цифровая камера из
+                    вымышленной серии.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $749
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Camera',
+                            749,
+                            '📷'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 10 -->
+
+            <div
+                class="product"
+                data-category="other"
+                data-name="Rustix Speaker"
+            >
+
+                <div class="product-image">
+                    🔊
+                </div>
+
+                <h3>Rustix Speaker</h3>
+
+                <p class="product-description">
+                    Портативная колонка
+                    с вымышленными характеристиками.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $129
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Speaker',
+                            129,
+                            '🔊'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 11 -->
+
+            <div
+                class="product"
+                data-category="other"
+                data-name="Rustix Drone"
+            >
+
+                <div class="product-image">
+                    🚁
+                </div>
+
+                <h3>Rustix Drone</h3>
+
+                <p class="product-description">
+                    Вымышленный компактный
+                    дрон для путешествий.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $899
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix Drone',
+                            899,
+                            '🚁'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- 12 -->
+
+            <div
+                class="product"
+                data-category="other"
+                data-name="Rustix PowerBank"
+            >
+
+                <div class="product-image">
+                    🔋
+                </div>
+
+                <h3>Rustix PowerBank</h3>
+
+                <p class="product-description">
+                    Внешний аккумулятор
+                    для твоих гаджетов.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        $79
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="addToCart(
+                            'Rustix PowerBank',
+                            79,
+                            '🔋'
+                        )"
+                    >
+                        В корзину
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         КОРЗИНА
+    ========================== -->
+
+    <div
+        class="cart-modal"
+        id="cartModal"
+        onclick="closeCartOutside(event)"
+    >
+
+        <div class="cart">
+
+            <div class="cart-header">
+
+                <h2>
+                    🛒 Корзина
+                </h2>
+
+                <button
+                    class="close-cart"
+                    onclick="closeCart()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div id="cartItems"></div>
+
+            <div class="cart-total">
+                Итого: $<span id="cartTotal">0</span>
+            </div>
+
+            <button
+                class="checkout-button"
+                onclick="checkout()"
+            >
+                Оформить фейковый заказ
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- УВЕДОМЛЕНИЕ -->
+
+    <div
+        class="notification"
+        id="notification"
+    >
+        Товар добавлен в корзину!
+    </div>
+
+
+    <!-- =========================
+         ПОДВАЛ
+    ========================== -->
+
+    <footer>
+
+        <h3>
+            Rustix Market
+        </h3>
+
+        <p>
+            Учебный фейковый интернет-магазин.
+        </p>
+
+        <p>
+            Реальные покупки и платежи здесь невозможны.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        /* ==================================
+           КОРЗИНА
+        ================================== */
+
+        let cart = [];
+
+
+        function addToCart(name, price, icon) {
+
+            const existingProduct = cart.find(
+                product => product.name === name
+            );
+
+            if (existingProduct) {
+
+                existingProduct.quantity++;
+
+            } else {
+
+                cart.push({
+                    name: name,
+                    price: price,
+                    icon: icon,
+                    quantity: 1
+                });
+
+            }
+
+            updateCart();
+
+            showNotification(
+                "✅ " + name + " добавлен в корзину!"
+            );
+        }
+
+
+        function updateCart() {
+
+            const cartItems =
+                document.getElementById("cartItems");
+
+            const cartCount =
+                document.getElementById("cartCount");
+
+            const cartTotal =
+                document.getElementById("cartTotal");
+
+
+            let total = 0;
+            let count = 0;
+
+
+            if (cart.length === 0) {
+
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        🛒<br><br>
+                        Корзина пока пустая
+                    </div>
+                `;
+
+            } else {
+
+                cartItems.innerHTML = "";
+
+                cart.forEach((item, index) => {
+
+                    total +=
+                        item.price * item.quantity;
+
+                    count += item.quantity;
+
+
+                    const element =
+                        document.createElement("div");
+
+                    element.className =
+                        "cart-item";
+
+
+                    element.innerHTML = `
+
+                        <div class="cart-item-icon">
+                            ${item.icon}
+                        </div>
+
+                        <div class="cart-item-info">
+
+                            <h4>
+                                ${item.name}
+                            </h4>
+
+                            <p>
+                                $${item.price}
+                                ×
+                                ${item.quantity}
+                            </p>
+
+                        </div>
+
+                        <button
+                            class="remove-button"
+                            onclick="removeFromCart(${index})"
+                        >
+                            Удалить
+                        </button>
+
+                    `;
+
+
+                    cartItems.appendChild(element);
+
+                });
+
+            }
+
+
+            cartCount.textContent = count;
+
+            cartTotal.textContent =
+                total.toLocaleString("en-US");
+
+        }
+
+
+        function removeFromCart(index) {
+
+            cart.splice(index, 1);
+
+            updateCart();
+
+            showNotification(
+                "Товар удалён из корзины"
+            );
+
+        }
+
+
+        /* ==================================
+           ОТКРЫТЬ КОРЗИНУ
+        ================================== */
+
+        function openCart() {
+
+            document
+                .getElementById("cartModal")
+                .classList.add("open");
+
+        }
+
+
+        /* ==================================
+           ЗАКРЫТЬ КОРЗИНУ
+        ================================== */
+
+        function closeCart() {
+
+            document
+                .getElementById("cartModal")
+                .classList.remove("open");
+
+        }
+
+
+        function closeCartOutside(event) {
+
+            if (
+                event.target.id === "cartModal"
+            ) {
+
+                closeCart();
+
+            }
+
+        }
+
+
+        /* ==================================
+           ОФОРМЛЕНИЕ
+        ================================== */
+
+        function checkout() {
+
+            if (cart.length === 0) {
+
+                alert(
+                    "Твоя корзина пустая!"
+                );
+
+                return;
+            }
+
+
+            const orderNumber =
+                Math.floor(
+                    100000 + Math.random() * 900000
+                );
+
+
+            alert(
+                "🎉 Фейковый заказ оформлен!\n\n" +
+                "Номер заказа: #" +
+                orderNumber +
+                "\n\n" +
+                "Это учебный сайт — реальные деньги не списываются."
+            );
+
+
+            cart = [];
+
+            updateCart();
+
+            closeCart();
+
+        }
+
+
+        /* ==================================
+           УВЕДОМЛЕНИЕ
+        ================================== */
+
+        function showNotification(text) {
+
+            const notification =
+                document.getElementById(
+                    "notification"
+                );
+
+            notification.textContent = text;
+
+            notification.classList.add("show");
+
+
+            setTimeout(() => {
+
+                notification.classList.remove("show");
+
+            }, 2500);
+
+        }
+
+
+        /* ==================================
+           ПОИСК
+        ================================== */
+
+        function searchProducts() {
+
+            const input =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .toLowerCase();
+
+
+            const products =
+                document.querySelectorAll(".product");
+
+
+            products.forEach(product => {
+
+                const name =
+                    product
+                        .dataset
+                        .name
+                        .toLowerCase();
+
+
+                if (name.includes(input)) {
+
+                    product.style.display = "";
+
+                } else {
+
+                    product.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* ==================================
+           ФИЛЬТР КАТЕГОРИЙ
+        ================================== */
+
+        function filterProducts(category, button) {
+
+            const products =
+                document.querySelectorAll(".product");
+
+
+            const buttons =
+                document.querySelectorAll(
+                    ".category-button"
+                );
+
+
+            buttons.forEach(btn => {
+
+                btn.classList.remove("active");
+
+            });
+
+
+            button.classList.add("active");
+
+
+            products.forEach(product => {
+
+                if (
+                    category === "all" ||
+                    product.dataset.category === category
+                ) {
+
+                    product.style.display = "";
+
+                } else {
+
+                    product.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* ==================================
+           ЗАПУСК
+        ================================== */
+
+        updateCart();
+
+    </script>
+
+</body>
+</html>
